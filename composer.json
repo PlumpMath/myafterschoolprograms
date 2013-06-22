@@ -1,0 +1,7 @@
+{
+	"name": "williamstein92/myafterschoolprograms",
+	"description": "Website for myafterschoolprograms",
+	"require-dev": {
+		"phpunit/phpunit": "3.7.*"
+	}
+}
