@@ -16,10 +16,10 @@ class Router
 		example/user/id => exampleuserfunction()
 		
 	public $functionURL;
-	
 	);
 	
-	function RouteURL() {
+	function RouteURL() 
+	{
 		//Accept URL
 		$incomingURL = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 	
