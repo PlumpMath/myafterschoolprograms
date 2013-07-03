@@ -8,6 +8,7 @@ class NodeTest extends PHPUnit_Framework_TestCase
 	protected $InternalNode;
 	protected $ExternalNode;
 	protected $Graph;
+	protected $Network;
 
 	public function setUp()
 	{
@@ -22,6 +23,23 @@ class NodeTest extends PHPUnit_Framework_TestCase
 		$this->Graph        = new InternalNode("This is Node 4.");
 		$this->Graph->insert($TemporaryNode);
 		$this->Graph[]      = "This is Node 5.";
+
+		$InputNode          = new InternalNode("Input Node", NULL);
+		$HiddenNode1        = new InternalNode("Hidden Node 1", 1);
+		$HiddenNode2        = new InternalNode("Hidden Node 2", 2);
+		$HiddenNode3        = new InternalNode("Hidden Node 3", 3);
+		$OutputNode         = new InternalNode("Output Node", NULL);
+
+		$HiddenNode1->insert($OutputNode);
+		$HiddenNode2->insert($OutputNode);
+		$HiddenNode3->insert($OutputNode)
+			->insert($HiddenNode2);
+
+		$InputNode->insert($HiddenNode1)
+			->insert($HiddenNode2)
+			->insert($HiddenNode3);
+
+		$this->Network = $InputNode;
 	}
 
 	public function testInternalCount()
@@ -92,5 +110,12 @@ class NodeTest extends PHPUnit_Framework_TestCase
 		if ($actual === $expected) echo "Testing: InternalNode->delete  ... OK!\n";
 
 		$this->assertEquals($expected, $actual);
+	}
+
+	public function testNetwork()
+	{
+		unset($this->Network["Hidden Node 2"]);
+
+		print_r($this->Network);
 	}
 }

@@ -75,7 +75,7 @@ class InternalNode implements InterfaceNode
 {
 	protected $children;
 	protected $offset;
-	protected $value;
+	public $value;
 	public static $uniqueID = 0;
 
 	public function __construct()
@@ -114,10 +114,16 @@ class InternalNode implements InterfaceNode
 	public function offsetSet($offset = NULL, $value)
 	{
 		$id = (empty($offset)) ? (++self::$uniqueID) : ($offset);
-
+		
 		$node = new InternalNode($id, $value);
+		
+		$searchResult = $this->search($node);
 
-		$this->insert($node);
+		if (!empty($searchResult)) {
+			$searchResult->value = $value;
+		} else {
+			$this->insert($node);
+		}
 	}
 
 	public function offsetUnset($offset)
@@ -166,13 +172,11 @@ class InternalNode implements InterfaceNode
 				$ax = $child;
 				unset($this->children[$key]);
 				array_values($this->children);
-				break;
 			} else {
 				$obj = $child->delete($node);
 
 				if (!empty($obj)) {
 					$ax = $obj;
-					break;
 				}
 			}
 		}
@@ -198,6 +202,8 @@ class InternalNode implements InterfaceNode
 	public function insert($node)
 	{
 		$this->children[] = $node;
+
+		return $this;
 	}
 
 	public function search($node)
