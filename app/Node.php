@@ -9,8 +9,6 @@ interface InterfaceNode extends ArrayAccess, Comparable, Countable
 {
 	public function delete($node);
 
-	public function height();
-
 	public function insert($node);
 
 	public function search($node);
@@ -55,11 +53,6 @@ class ExternalNode implements InterfaceNode
 		return NULL;		
 	}
 
-	public function height()
-	{
-		return 0;
-	}
-
 	public function insert($node)
 	{
 		return $node;
@@ -75,7 +68,8 @@ class InternalNode implements InterfaceNode
 {
 	protected $children;
 	protected $offset;
-	public $value;
+	protected $value;
+
 	public static $uniqueID = 0;
 
 	public function __construct()
@@ -99,14 +93,16 @@ class InternalNode implements InterfaceNode
 
 	public function offsetExists($offset)
 	{
-		$node = new InternalNode($offset, NULL);
+		$class = get_class($this);
+		$node = new $class($offset, NULL);
 
 		return ($this->search($node) instanceof InternalNode);
 	}
 
 	public function offsetGet($offset)
 	{
-		$node = new InternalNode($offset, NULL);
+		$class = get_class($this);
+		$node = new $class($offset, NULL);
 
 		return $this->search($node);
 	}
@@ -115,8 +111,8 @@ class InternalNode implements InterfaceNode
 	{
 		$id = (empty($offset)) ? (++self::$uniqueID) : ($offset);
 		
-		$node = new InternalNode($id, $value);
-		
+		$class = get_class($this);
+		$node = new $class($id, $value);
 		$searchResult = $this->search($node);
 
 		if (!empty($searchResult)) {
@@ -128,7 +124,8 @@ class InternalNode implements InterfaceNode
 
 	public function offsetUnset($offset)
 	{
-		$node = new InternalNode($offset, NULL);
+		$class = get_class($this);
+		$node = new $class($offset, NULL);
 
 		$this->delete($node);
 	}
@@ -182,21 +179,6 @@ class InternalNode implements InterfaceNode
 		}
 
 		return $ax;
-	}
-
-	public function height()
-	{
-		$ax = 0;
-
-		foreach($this->children as $child) {
-			$height = $child->height();
-
-			if ($height > $ax) {
-				$ax = $height;
-			}
-		}
-
-		return $ax + 1;
 	}
 
 	public function insert($node)
