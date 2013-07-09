@@ -10,51 +10,24 @@
 
 class Router
 {
-	//Defines routes URL -> Function
-	protected $routes = [
-		"foo/bar" => "fooBar",
-	];
+	protected $routes = [];
 
-	// This way, {$routes[$key]}() will execute the associated function
-	
-	/**/
-	public function fooBar()
+	public function __construct($routes)
 	{
-	    return "Foo Bar";
+		$this->routes = $routes;
 	}
 
-	public function getRoute($key)
+	public function extractArguments($URL)
 	{
-		$callback = $this->routes[$key];
-
-		return $this->$callback();
+		
 	}
-	/**/
+
+	public function 
 }
 
-$Router = new Router;
+$Router = new Router(['/' => 'View_Home',
+					   '/user/::/' => 'View_User',
+					   '/user/::/account/' => 'View_User_Account',
+					   '/location/::/' => 'View_Location']);
 
-echo $Router->getRoute("foo/bar");
-
-	/** /
-	function RouteURL() 
-	{
-		//Accept URL
-		$incomingURL = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-		$path = explode('/', $incomingURL);
-		foreach ($route in key($routes)) {
-			if ($route == $path) {
-				//execute current($routes);
-				$functionURL = current($routes);
-			}; //understand this may not work as path is not in same form as route
-			
-			//if URL does not map to a function
-			if is_null($functionURL) {
-					$functionURL = "This page does not exist";
-				}
-		
-			//Output
-			echo $functionURL;
-		}
-	}
-	/**/
+echo $Router->callback('/user/1030/account/');
