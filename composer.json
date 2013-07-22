@@ -4,7 +4,7 @@
 	"version": "0.0.1-dev",
 	"type": "project",
 	"require-dev": {
-		"phpunit/phpunit": "3.7.*"
-		"phpoffice/phpexcel": "dev-develop_2.*"
+		"phpunit/phpunit": "3.7.*",
+		"phpoffice/phpexcel": "dev-develop_2.0.0"
 	}
 }
